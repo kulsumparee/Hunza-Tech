@@ -114,15 +114,14 @@ export default function Contact() {
         <div className="container-site">
           <Reveal>
             <p className="eyebrow">Location</p>
-            <h2 className="display mt-3 text-3xl">Software Technology Park, Nasirabad, Hunza</h2>
+            <h2 className="display mt-3 text-3xl">IT Park, Nasirabad, Hunza</h2>
             <p className="mt-3 max-w-2xl text-ht-stone">
-              This map searches the publicly listed office address. If you are visiting, message
-              ahead so someone can meet you.
+              {company.location.address}. If you are visiting, message ahead so someone can meet you.
             </p>
           </Reveal>
           <div className="mt-8 overflow-hidden border border-ht-line">
             <iframe
-              title="Map of Software Technology Park, Nasirabad, Hunza"
+              title="Map of IT Park, Nasirabad, Hunza"
               src={mapSrc}
               className="h-[22rem] w-full border-0 md:h-[28rem]"
               loading="lazy"

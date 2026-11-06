@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
 
   --color-ht-orange: #f58b1e;
@@ -35,7 +35,7 @@
 
   body {
     margin: 0;
-    overflow-x: hidden;
+    overflow-x: clip;
     background: var(--color-ht-cream);
     color: var(--color-ht-ink);
     font-family: var(--font-sans);
@@ -94,11 +94,19 @@
     color: var(--color-ht-orange);
   }
 
+  h1,
+  h2,
+  h3,
+  .display {
+    overflow: visible;
+  }
+
   .display {
     font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: -0.035em;
-    line-height: 1.05;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    padding-bottom: 0.12em;
   }
 
   .btn {

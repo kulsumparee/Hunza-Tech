@@ -18,8 +18,8 @@ export default function About() {
         eyebrow="About us"
         title="Who we are."
         text="A technology and digital solutions company in Hunza, working with businesses, organisations and people who want to build digital skills."
-        image="/images/hunza-karakoram.jpg"
-        imageAlt="Karakoram mountains above the Hunza valley"
+        image="/images/gallery/itpark-04.jpg"
+        imageAlt="IT Park building in Nasirabad, Hunza"
       />
 
       <section className="bg-ht-cream py-20 md:py-24">

@@ -59,20 +59,19 @@ Verified public facts used on the site:
 
 The previous website used placeholder team names, awards, testimonials and lorem ipsum. None of that content was reused.
 
-Not invented, and therefore not shown as facts: client lists, project counts, awards, testimonials, employee numbers, course fees, course duration, accreditation, or placement guarantees.
+Google reviews shown on the homepage are taken from the public IT PARK listing in Nasirabad (5.0 from 4 reviews as published). Reviewer names were not listed, so they are not invented here.
 
 ## Contact form
 
-The form validates in the browser.
+The form validates in the browser, then posts to FormSubmit, which delivers the enquiry to `hunzatechnologies84@gmail.com`.
 
-- If `VITE_FORM_ENDPOINT` is empty, Submit opens the visitor’s email client with a prepared message to `hunzatechnologies84@gmail.com`. WhatsApp is offered as a second real path.
-- To send enquiries without mailto, create a Formspree or FormSubmit form that delivers to the company inbox, then set:
+The first submission sends an activation email to that Gmail inbox. Open it and confirm the address once. After that, new enquiries arrive in Gmail automatically.
+
+To use a different backend, set:
 
 ```bash
 VITE_FORM_ENDPOINT=https://formspree.io/f/your-id
 ```
-
-Rebuild after changing the variable. The endpoint is bundled into the frontend (typical for Formspree). Do not put a private API secret in a `VITE_` variable.
 
 ## Updating content
 

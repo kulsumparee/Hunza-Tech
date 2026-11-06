@@ -6,14 +6,17 @@ export const company = {
   type: "Privately held",
   headquarters: "Hunza, Pakistan",
   location: {
-    label: "Software Technology Park, Nasirabad, Hunza",
-    short: "STP Nasirabad, Hunza",
+    label: "IT Park, Nasirabad, Hunza",
+    short: "IT Park Nasirabad, Hunza",
     region: "Gilgit-Baltistan, Pakistan",
-    mapsQuery: "Software Technology Park Nasirabad Hunza",
+    address: "7G7C+7MM, Nasirabad Bala, Hunza",
+    lat: 36.2632131,
+    lng: 74.5216718,
+    mapsQuery: "IT PARK Nasirabad Hunza",
     mapsEmbed:
-      "https://maps.google.com/maps?q=Software%20Technology%20Park%20Nasirabad%20Hunza&z=14&output=embed",
+      "https://maps.google.com/maps?q=36.2632131,74.5216718&ll=36.2632131,74.5216718&z=17&output=embed",
     mapsLink:
-      "https://www.google.com/maps/search/?api=1&query=Software%20Technology%20Park%20Nasirabad%20Hunza",
+      "https://www.google.com/maps/place/IT+PARK/@36.2632131,74.5216718,17z/data=!3m1!4b1!4m6!3m5!1s0x38e621004d6c97af:0xe89186517cb08b65!8m2!3d36.2632131!4d74.5216718!16s%2Fg%2F11vz2ytp8h",
   },
   phone: {
     display: "+92 340 4899562",

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { company, inquiryTypes } from "../data/company";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const GMAIL_ENDPOINT = `https://formsubmit.co/ajax/${company.email.address}`;
 
 function validate(values) {
   const errors = {};
@@ -24,25 +25,15 @@ function validate(values) {
   return errors;
 }
 
-function buildMailBody(values) {
-  return [
-    `Name: ${values.name}`,
-    `Email: ${values.email}`,
-    `Phone: ${values.phone || "Not provided"}`,
-    `Inquiry type: ${values.inquiryType}`,
-    "",
-    values.message,
-  ].join("\n");
-}
-
 export default function ContactForm({ defaultType = "" }) {
-  const endpoint = import.meta.env.VITE_FORM_ENDPOINT || "";
+  const endpoint = import.meta.env.VITE_FORM_ENDPOINT || GMAIL_ENDPOINT;
   const [values, setValues] = useState({
     name: "",
     email: "",
     phone: "",
     inquiryType: defaultType && inquiryTypes.includes(defaultType) ? defaultType : "",
     message: "",
+    honey: "",
   });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle");
@@ -70,6 +61,12 @@ export default function ContactForm({ defaultType = "" }) {
 
   async function onSubmit(event) {
     event.preventDefault();
+    if (values.honey) {
+      setStatus("sent");
+      setStatusMessage("Thank you. Your enquiry has been sent.");
+      return;
+    }
+
     const nextErrors = validate(values);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) {
@@ -81,44 +78,47 @@ export default function ContactForm({ defaultType = "" }) {
     setStatus("sending");
     setStatusMessage("");
 
-    if (endpoint) {
-      try {
-        const response = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: values.name.trim(),
-            email: values.email.trim(),
-            phone: values.phone.trim(),
-            inquiryType: values.inquiryType,
-            message: values.message.trim(),
-            _subject: `Hunza Technologies enquiry — ${values.inquiryType}`,
-          }),
-        });
-        if (!response.ok) throw new Error("Request failed");
-        setStatus("sent");
-        setStatusMessage("Thank you. Your enquiry has been sent. We will reply to the email you provided.");
-        setValues({ name: "", email: "", phone: "", inquiryType: defaultType || "", message: "" });
-        return;
-      } catch {
-        setStatus("error");
-        setStatusMessage(
-          "The form service could not be reached. Use email or WhatsApp below — both go directly to Hunza Technologies.",
-        );
-        return;
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: values.name.trim(),
+          email: values.email.trim(),
+          phone: values.phone.trim() || "Not provided",
+          inquiryType: values.inquiryType,
+          message: values.message.trim(),
+          _subject: `Hunza Technologies enquiry — ${values.inquiryType}`,
+          _replyto: values.email.trim(),
+          _captcha: "false",
+          _template: "table",
+        }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(payload.message || "Request failed");
       }
+      setStatus("sent");
+      setStatusMessage(
+        "Thank you. Your enquiry has been sent to Hunza Technologies. We will reply to the email you provided.",
+      );
+      setValues({
+        name: "",
+        email: "",
+        phone: "",
+        inquiryType: defaultType || "",
+        message: "",
+        honey: "",
+      });
+    } catch {
+      setStatus("error");
+      setStatusMessage(
+        `The enquiry could not be delivered just now. Email ${company.email.address} or use WhatsApp. If this is the first message to this inbox, Hunza Technologies may need to confirm a one-time activation email from FormSubmit.`,
+      );
     }
-
-    const subject = encodeURIComponent(`Hunza Technologies enquiry — ${values.inquiryType}`);
-    const body = encodeURIComponent(buildMailBody(values));
-    window.location.href = `${company.email.href}?subject=${subject}&body=${body}`;
-    setStatus("mailto");
-    setStatusMessage(
-      "Your email app should open with the enquiry filled in. If it does not, send the same message to hunzatechnologies84@gmail.com or use WhatsApp.",
-    );
   }
 
   const fieldClass =
@@ -126,6 +126,10 @@ export default function ContactForm({ defaultType = "" }) {
 
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-5">
+      <label className="sr-only" aria-hidden="true">
+        Leave blank
+        <input name="honey" value={values.honey} onChange={onChange} tabIndex={-1} autoComplete="off" />
+      </label>
       <div className="grid gap-5 sm:grid-cols-2">
         <label className="block text-sm font-medium">
           Full name
@@ -224,13 +228,6 @@ export default function ContactForm({ defaultType = "" }) {
           Or send via WhatsApp
         </a>
       </div>
-
-      {!endpoint ? (
-        <p className="m-0 text-xs text-ht-mute">
-          Submit opens your email app with a prepared message to {company.email.address}. You can
-          also send the same enquiry on WhatsApp.
-        </p>
-      ) : null}
     </form>
   );
 }
