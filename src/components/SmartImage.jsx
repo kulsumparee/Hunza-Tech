@@ -2,6 +2,7 @@ export default function SmartImage({
   src,
   alt,
   className = "",
+  style,
   width,
   height,
   loading = "lazy",
@@ -15,6 +16,7 @@ export default function SmartImage({
         src={src}
         alt={alt}
         className={className}
+        style={style}
         width={width}
         height={height}
         loading={loading}
@@ -29,6 +31,7 @@ export default function SmartImage({
         src={src}
         alt={alt}
         className={className}
+        style={style}
         width={width}
         height={height}
         loading={loading}
