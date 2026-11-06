@@ -12,12 +12,19 @@ Tagline: **Empower Ideas Through Technology.**
 - React Router
 - Lucide React
 
-## Local development
+## See the code locally
+
+The live site currently lives on the working branch `cursor/hunza-technologies-website-878e` (the `main` branch only has the starter README until the pull request is merged).
 
 ```bash
+git clone https://github.com/kulsumparee/Hunza-Tech.git
+cd Hunza-Tech
+git checkout cursor/hunza-technologies-website-878e
 npm install
 npm run dev
 ```
+
+Then open [http://localhost:5173](http://localhost:5173). You can also browse the files on GitHub or open the cloned folder in Cursor.
 
 Production build:
 
