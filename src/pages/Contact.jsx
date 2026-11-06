@@ -81,7 +81,7 @@ export default function Contact() {
 
             <div className="mt-10">
               <p className="eyebrow">Social</p>
-              <div className="mt-4 flex gap-5">
+              <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
                 {company.social.map((item) => (
                   <a
                     key={item.name}

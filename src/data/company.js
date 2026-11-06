@@ -37,6 +37,10 @@ export const company = {
       name: "Facebook",
       href: "https://www.facebook.com/HunzaTechnologies",
     },
+    {
+      name: "Instagram",
+      href: "https://www.instagram.com/hunzatechnologies/",
+    },
   ],
   siteUrl: "https://hunzatechnologies.com",
   officialDescription:
