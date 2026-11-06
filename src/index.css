@@ -1,0 +1,228 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+
+  --color-ht-orange: #f58b1e;
+  --color-ht-orange-deep: #d47310;
+  --color-ht-orange-ink: #b85e0d;
+  --color-ht-amber: #f6a03c;
+  --color-ht-ink: #1a1d1a;
+  --color-ht-ink-soft: #242824;
+  --color-ht-ink-mid: #2e322e;
+  --color-ht-ink-deep: #101210;
+  --color-ht-paper: #f4f0e8;
+  --color-ht-paper-2: #e8e2d6;
+  --color-ht-cream: #fbf8f2;
+  --color-ht-stone: #5c5852;
+  --color-ht-mute: #7a746c;
+  --color-ht-line: #d8d1c5;
+  --color-ht-line-dark: #3a3e3a;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--color-ht-cream);
+    color: var(--color-ht-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-ht-orange);
+    color: var(--color-ht-ink);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  img,
+  svg {
+    max-width: 100%;
+    display: block;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ht-orange);
+    outline-offset: 3px;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    scroll-margin-top: 6rem;
+  }
+}
+
+@layer components {
+  .container-site {
+    width: min(1180px, calc(100% - 2.5rem));
+    margin-inline: auto;
+  }
+
+  @media (min-width: 768px) {
+    .container-site {
+      width: min(1180px, calc(100% - 4rem));
+    }
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ht-orange);
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 3rem;
+    padding: 0.8rem 1.35rem;
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition:
+      background-color 180ms ease,
+      color 180ms ease,
+      border-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .btn-primary {
+    background: var(--color-ht-orange);
+    color: var(--color-ht-ink-deep);
+  }
+
+  .btn-primary:hover {
+    background: #ffa03a;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-ht-paper);
+    border-color: rgba(244, 240, 232, 0.28);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--color-ht-orange);
+    color: var(--color-ht-orange);
+  }
+
+  .btn-dark {
+    background: var(--color-ht-ink);
+    color: var(--color-ht-paper);
+  }
+
+  .btn-dark:hover {
+    background: #2a2e2a;
+  }
+
+  .btn-line {
+    background: transparent;
+    color: var(--color-ht-ink);
+    border-color: var(--color-ht-ink);
+  }
+
+  .btn-line:hover {
+    background: var(--color-ht-ink);
+    color: var(--color-ht-paper);
+  }
+
+  .hairline {
+    height: 1px;
+    background: var(--color-ht-line);
+    border: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal.is-in {
+    animation: rise-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 80;
+  background: var(--color-ht-orange);
+  color: var(--color-ht-ink);
+  padding: 0.6rem 0.9rem;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.nav-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-ht-orange);
+  z-index: 70;
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal,
+  .reveal.is-in {
+    animation: none;
+  }
+
+  .btn,
+  a,
+  button {
+    transition: none;
+  }
+}
