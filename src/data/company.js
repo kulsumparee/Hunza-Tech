@@ -1,6 +1,12 @@
 export const company = {
   name: "Hunza Technologies",
   tagline: "Empower Ideas Through Technology.",
+  heroQuotes: [
+    "Innovate Today, Lead Tomorrow.",
+    "Empower Ideas Through Technology.",
+    "Turning Your Vision into Digital Reality.",
+    "Smart Technology, Limitless Possibilities.",
+  ],
   shortName: "HT",
   industry: "IT Services and IT Consulting",
   type: "Privately held",
