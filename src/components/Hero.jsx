@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { company } from "../data/company";
 
+const orbitStarts = ["-18deg", "72deg", "168deg", "258deg"];
+
 export default function Hero() {
   return (
-    <section className="relative overflow-x-hidden bg-ht-ink text-ht-paper">
+    <section className="relative bg-ht-ink text-ht-paper">
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.18]"
         aria-hidden="true"
@@ -15,10 +17,10 @@ export default function Hero() {
         }}
       />
 
-      <div className="container-site relative grid items-end gap-12 pt-28 pb-16 lg:min-h-[100svh] lg:grid-cols-12 lg:items-center lg:pb-24">
-        <div className="lg:col-span-7">
+      <div className="container-site relative grid items-center gap-8 pt-28 pb-14 lg:min-h-[100svh] lg:grid-cols-12 lg:gap-8 lg:pb-20">
+        <div className="lg:col-span-6 xl:col-span-6">
           <p className="eyebrow">Nasirabad, Hunza · Digital services & training</p>
-          <h1 className="display mt-6 max-w-[14ch] text-[2.65rem] text-ht-paper sm:text-6xl lg:text-[4.35rem]">
+          <h1 className="display mt-6 max-w-[14ch] text-[2.65rem] text-ht-paper sm:text-6xl lg:text-[4.1rem]">
             Empowering Businesses. Building Digital Futures.
           </h1>
           <p className="mt-6 max-w-xl text-lg text-ht-paper/75">
@@ -34,30 +36,28 @@ export default function Hero() {
               Get in Touch
             </Link>
           </div>
-          <img
-            src="/logo.png"
-            alt=""
-            width={160}
-            height={160}
-            className="mt-8 w-24 rounded-full lg:hidden"
-          />
         </div>
 
-        <div className="relative hidden lg:col-span-5 lg:block lg:justify-self-end">
-          <div className="relative mx-auto w-44 sm:w-72 lg:w-[22rem]">
-            <div className="absolute -inset-6 rounded-full border border-ht-orange/25 sm:-inset-8" aria-hidden="true" />
-            <div className="absolute -inset-14 hidden rounded-full border border-ht-orange/10 lg:block" aria-hidden="true" />
+        <div className="relative mx-auto w-full max-w-[19.25rem] sm:max-w-[22.5rem] lg:col-span-6 lg:max-w-[25.5rem]">
+          <div className="hero-orbit" role="presentation">
+            {company.heroQuotes.map((quote, index) => (
+              <div
+                key={quote}
+                className={`hero-orbit-ring hero-orbit-ring-${index + 1}`}
+                style={{ "--orbit-start": orbitStarts[index] }}
+              >
+                <span className="hero-orbit-planet" aria-hidden="true" />
+                <p className="hero-orbit-quote">{quote}</p>
+              </div>
+            ))}
             <img
               src="/logo.png"
               alt="Official Hunza Technologies logo"
               width={512}
               height={512}
-              className="relative w-full rounded-full object-cover"
+              className="hero-orbit-sun"
             />
           </div>
-          <p className="mt-6 text-center text-sm text-ht-paper/55 lg:text-right">
-            {company.tagline}
-          </p>
         </div>
       </div>
 
