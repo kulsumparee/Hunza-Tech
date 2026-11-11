@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { company } from "../data/company";
 
-const orbitStarts = ["-18deg", "72deg", "168deg", "258deg"];
+const orbitStarts = ["0deg", "90deg", "180deg", "270deg"];
 
 export default function Hero() {
   return (

@@ -220,6 +220,7 @@
 
 .hero-orbit {
   --orbit-start: 0deg;
+  --orbit-duration: 36s;
   --quote-shift: translate(-50%, 10px);
   position: relative;
   width: 100%;
@@ -232,7 +233,7 @@
 .hero-orbit-sun {
   position: relative;
   z-index: 2;
-  width: 34%;
+  width: 32%;
   border-radius: 50%;
   object-fit: cover;
   box-shadow:
@@ -253,33 +254,29 @@
 }
 
 .hero-orbit-ring-1 {
-  width: 64%;
-  height: 64%;
-  margin: -32% 0 0 -32%;
-  --orbit-duration: 22s;
+  width: 62%;
+  height: 62%;
+  margin: -31% 0 0 -31%;
 }
 
 .hero-orbit-ring-2 {
-  width: 74%;
-  height: 74%;
-  margin: -37% 0 0 -37%;
-  --orbit-duration: 32s;
+  width: 72%;
+  height: 72%;
+  margin: -36% 0 0 -36%;
   border-color: rgba(245, 139, 30, 0.16);
 }
 
 .hero-orbit-ring-3 {
-  width: 84%;
-  height: 84%;
-  margin: -42% 0 0 -42%;
-  --orbit-duration: 44s;
+  width: 86%;
+  height: 86%;
+  margin: -43% 0 0 -43%;
   border-color: rgba(245, 139, 30, 0.12);
 }
 
 .hero-orbit-ring-4 {
-  width: 90%;
-  height: 90%;
-  margin: -45% 0 0 -45%;
-  --orbit-duration: 58s;
+  width: 98%;
+  height: 98%;
+  margin: -49% 0 0 -49%;
   border-color: rgba(244, 240, 232, 0.1);
 }
 
