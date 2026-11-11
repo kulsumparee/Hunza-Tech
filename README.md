@@ -72,7 +72,9 @@ Google reviews shown on the homepage are taken from the public IT PARK listing i
 
 The form validates in the browser, then posts to FormSubmit, which delivers the enquiry to `hunzatechnologies84@gmail.com`.
 
-The first submission sends an activation email to that Gmail inbox. Open it and confirm the address once. After that, new enquiries arrive in Gmail automatically.
+Each enquiry email is a table of what the visitor typed: full name, email, phone, the skill or service they want (including the training programme when they ask to learn), and their message.
+
+The first submission from a new website address sends an activation email to that Gmail inbox. Open it, click **Activate Form**, then submit the enquiry again. After that, new enquiries arrive in Gmail with the visitor’s answers.
 
 To use a different backend, set:
 
