@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { company, inquiryTypes } from "../data/company";
+import { trainingPrograms } from "../data/training";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const GMAIL_ENDPOINT = `https://formsubmit.co/ajax/${company.email.address}`;
+const GMAIL_ENDPOINT = `https://formsubmit.co/ajax/${company.email.formsubmitId}`;
+const TRAINING_TYPE = "Training Services";
 
 function validate(values) {
   const errors = {};
@@ -17,12 +19,41 @@ function validate(values) {
     errors.phone = "Enter a phone number with at least 7 digits, or leave this blank.";
   }
   if (!values.inquiryType) {
-    errors.inquiryType = "Select an inquiry type.";
+    errors.inquiryType = "Select the skill or service you want.";
+  }
+  if (values.inquiryType === TRAINING_TYPE && !values.programme) {
+    errors.programme = "Select the training programme you want to learn.";
   }
   if (!values.message.trim() || values.message.trim().length < 12) {
     errors.message = "Add a short message so we know how to help.";
   }
   return errors;
+}
+
+function enquiryCopy(values) {
+  const skill =
+    values.inquiryType === TRAINING_TYPE && values.programme
+      ? `${values.programme} (training)`
+      : values.inquiryType;
+  return [
+    `Full name: ${values.name.trim()}`,
+    `Visitor email: ${values.email.trim()}`,
+    `Phone: ${values.phone.trim() || "Not provided"}`,
+    `Skill or service they want: ${skill}`,
+    values.inquiryType === TRAINING_TYPE
+      ? `Training programme: ${values.programme}`
+      : null,
+    "",
+    "Message:",
+    values.message.trim(),
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
+}
+
+function isActivationResponse(payload) {
+  const text = `${payload?.message || ""} ${payload?.success || ""}`.toLowerCase();
+  return /activat|confirm your email|one step away|check your inbox/.test(text);
 }
 
 export default function ContactForm({ defaultType = "" }) {
@@ -32,6 +63,7 @@ export default function ContactForm({ defaultType = "" }) {
     email: "",
     phone: "",
     inquiryType: defaultType && inquiryTypes.includes(defaultType) ? defaultType : "",
+    programme: "",
     message: "",
     honey: "",
   });
@@ -46,17 +78,17 @@ export default function ContactForm({ defaultType = "" }) {
   }, [defaultType]);
 
   const waHref = useMemo(() => {
-    const text = encodeURIComponent(
-      `Hello Hunza Technologies. My name is ${values.name || "(name)"}. Inquiry: ${
-        values.inquiryType || "(type)"
-      }.\n\n${values.message || ""}`,
-    );
+    const text = encodeURIComponent(enquiryCopy(values) || "Hello Hunza Technologies.");
     return `${company.phone.whatsapp}?text=${text}`;
   }, [values]);
 
   function onChange(event) {
     const { name, value } = event.target;
-    setValues((current) => ({ ...current, [name]: value }));
+    setValues((current) => ({
+      ...current,
+      [name]: value,
+      ...(name === "inquiryType" && value !== TRAINING_TYPE ? { programme: "" } : {}),
+    }));
   }
 
   async function onSubmit(event) {
@@ -78,29 +110,47 @@ export default function ContactForm({ defaultType = "" }) {
     setStatus("sending");
     setStatusMessage("");
 
+    const skillWanted =
+      values.inquiryType === TRAINING_TYPE && values.programme
+        ? values.programme
+        : values.inquiryType;
+    const details = enquiryCopy(values);
+    const body = new FormData();
+    body.append("Full Name", values.name.trim());
+    body.append("Visitor Email", values.email.trim());
+    body.append("email", values.email.trim());
+    body.append("Phone", values.phone.trim() || "Not provided");
+    body.append("Skill or service they want", skillWanted);
+    body.append("Inquiry type", values.inquiryType);
+    if (values.inquiryType === TRAINING_TYPE) {
+      body.append("Training programme they want to learn", values.programme);
+    }
+    body.append("Message", values.message.trim());
+    body.append("Enquiry details", details);
+    body.append("_subject", `Hunza Technologies enquiry — ${skillWanted}`);
+    body.append("_replyto", values.email.trim());
+    body.append("_captcha", "false");
+    body.append("_template", "table");
+
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: values.name.trim(),
-          email: values.email.trim(),
-          phone: values.phone.trim() || "Not provided",
-          inquiryType: values.inquiryType,
-          message: values.message.trim(),
-          _subject: `Hunza Technologies enquiry — ${values.inquiryType}`,
-          _replyto: values.email.trim(),
-          _captcha: "false",
-          _template: "table",
-        }),
+        headers: { Accept: "application/json" },
+        body,
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
         throw new Error(payload.message || "Request failed");
       }
+
+      if (isActivationResponse(payload)) {
+        setStatus("error");
+        setStatusMessage(
+          `FormSubmit sent an activation email to ${company.email.address}. Open that Gmail, click Activate Form, then submit this enquiry again. After that, each enquiry will show the visitor’s name, email, skill and message.`,
+        );
+        return;
+      }
+
       setStatus("sent");
       setStatusMessage(
         "Thank you. Your enquiry has been sent to Hunza Technologies. We will reply to the email you provided.",
@@ -110,19 +160,21 @@ export default function ContactForm({ defaultType = "" }) {
         email: "",
         phone: "",
         inquiryType: defaultType || "",
+        programme: "",
         message: "",
         honey: "",
       });
     } catch {
       setStatus("error");
       setStatusMessage(
-        `The enquiry could not be delivered just now. Email ${company.email.address} or use WhatsApp. If this is the first message to this inbox, Hunza Technologies may need to confirm a one-time activation email from FormSubmit.`,
+        `The enquiry could not be delivered just now. Email ${company.email.address} or use WhatsApp.`,
       );
     }
   }
 
   const fieldClass =
     "mt-2 w-full border border-ht-line bg-ht-cream px-4 py-3 text-ht-ink outline-none transition-colors focus:border-ht-orange";
+  const wantsTraining = values.inquiryType === TRAINING_TYPE;
 
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-5">
@@ -173,7 +225,7 @@ export default function ContactForm({ defaultType = "" }) {
           {errors.phone ? <span className="mt-1 block text-sm text-red-700">{errors.phone}</span> : null}
         </label>
         <label className="block text-sm font-medium">
-          Inquiry type
+          Skill or service you want
           <select
             name="inquiryType"
             value={values.inquiryType}
@@ -181,7 +233,7 @@ export default function ContactForm({ defaultType = "" }) {
             className={fieldClass}
             aria-invalid={Boolean(errors.inquiryType)}
           >
-            <option value="">Select a topic</option>
+            <option value="">Select a skill or service</option>
             {inquiryTypes.map((type) => (
               <option key={type} value={type}>
                 {type}
@@ -193,6 +245,29 @@ export default function ContactForm({ defaultType = "" }) {
           ) : null}
         </label>
       </div>
+
+      {wantsTraining ? (
+        <label className="block text-sm font-medium">
+          Which skill do you want to learn?
+          <select
+            name="programme"
+            value={values.programme}
+            onChange={onChange}
+            className={fieldClass}
+            aria-invalid={Boolean(errors.programme)}
+          >
+            <option value="">Select a training programme</option>
+            {trainingPrograms.map((program) => (
+              <option key={program.slug} value={program.name}>
+                {program.name}
+              </option>
+            ))}
+          </select>
+          {errors.programme ? (
+            <span className="mt-1 block text-sm text-red-700">{errors.programme}</span>
+          ) : null}
+        </label>
+      ) : null}
 
       <label className="block text-sm font-medium">
         Message
