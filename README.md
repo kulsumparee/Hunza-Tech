@@ -70,13 +70,16 @@ Google reviews shown on the homepage are taken from the public IT PARK listing i
 
 ## Contact form
 
-The form validates in the browser, then posts the enquiry to [Form.taxi](https://form.taxi) (`https://form.taxi/s/jtuweah7`). Form.taxi emails it to `hunzatechnologies84@gmail.com`. The visitor stays on the page and sees a success message; this is a JSON POST (`Accept: application/json`), not a cross-origin FormSubmit AJAX call (Cloudflare blocks that).
+The form validates in the browser, then sends the enquiry two ways so it can reach `hunzatechnologies84@gmail.com`:
+
+1. A normal HTML POST to FormSubmit (the method FormSubmit documents; AJAX is blocked by Cloudflare).
+2. A JSON POST to [Form.taxi](https://form.taxi) (`https://form.taxi/s/jtuweah7`).
 
 Each enquiry email includes what the visitor typed: full name, email, phone, the skill or service they want (including the training programme when they ask to learn), and their message.
 
-Form.taxi sends a one-time confirmation to that Gmail inbox when the endpoint is created. Open it and confirm the account so later submissions are forwarded. After that, new enquiries arrive in Gmail with the visitor’s answers.
+The first submission from a new website can send an **Activate Form** or Form.taxi confirmation email to that Gmail inbox. Open it, click the link, then submit the enquiry again. After that, new enquiries arrive with the visitor’s answers. Check spam if nothing appears.
 
-To use a different backend, set:
+To use a different Form.taxi (or similar) JSON endpoint, set:
 
 ```bash
 VITE_FORM_ENDPOINT=https://form.taxi/s/your-code

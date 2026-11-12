@@ -32,12 +32,12 @@ export const galleryPhotos = [
     position: "center 35%",
   },
   {
-    src: "/images/hunza-karakoram.jpg",
-    alt: "Karakoram mountains around Hunza, near IT Park Nasirabad",
+    src: "/images/gallery/itpark-team.jpg",
+    alt: "Group photo outside IT Park, Nasirabad, Hunza",
     kicker: "05",
-    caption: "Hunza valley",
+    caption: "The team",
     area: "e",
-    position: "center 62%",
+    position: "center 42%",
   },
 ];
 
