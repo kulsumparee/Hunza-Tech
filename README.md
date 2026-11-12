@@ -66,7 +66,7 @@ Verified public facts used on the site:
 
 The previous website used placeholder team names, awards, testimonials and lorem ipsum. None of that content was reused.
 
-Google reviews shown on the homepage are taken from the public IT PARK listing in Nasirabad (5.0 from 4 reviews as published). Reviewer names were not listed, so they are not invented here.
+Google reviews shown on the homepage are taken from the public IT PARK listing in Nasirabad (5.0). The named review from kulsumparee671 is the Hunza Technologies comment posted on that listing. Other reviewer names were not listed, so they are not invented.
 
 ## Contact form
 
