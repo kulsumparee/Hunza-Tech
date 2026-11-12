@@ -40,10 +40,14 @@ export default function Hero() {
 
         <div className="relative mx-auto w-full max-w-[19.25rem] sm:max-w-[22.5rem] lg:col-span-6 lg:max-w-[25.5rem]">
           <div className="hero-orbit" role="presentation">
+            <div className="hero-orbit-ring hero-orbit-ring-1" aria-hidden="true" />
+            <div className="hero-orbit-ring hero-orbit-ring-2" aria-hidden="true" />
+            <div className="hero-orbit-ring hero-orbit-ring-3" aria-hidden="true" />
+            <div className="hero-orbit-ring hero-orbit-ring-4" aria-hidden="true" />
             {company.heroQuotes.map((quote, index) => (
               <div
                 key={quote}
-                className={`hero-orbit-ring hero-orbit-ring-${index + 1}`}
+                className={`hero-orbit-carrier ${index % 2 === 0 ? "hero-orbit-shell-3" : "hero-orbit-shell-4"}`}
                 style={{ "--orbit-start": orbitStarts[index] }}
               >
                 <span className="hero-orbit-planet" aria-hidden="true" />

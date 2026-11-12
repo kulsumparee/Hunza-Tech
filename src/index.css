@@ -242,42 +242,58 @@
     0 0 64px rgba(245, 139, 30, 0.18);
 }
 
-.hero-orbit-ring {
+.hero-orbit-ring,
+.hero-orbit-carrier {
   position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 3;
-  border: 1px solid rgba(245, 139, 30, 0.22);
   border-radius: 50%;
   pointer-events: none;
-  transform: rotate(var(--orbit-start));
+}
+
+.hero-orbit-ring {
+  z-index: 1;
+  border: 1px solid rgba(245, 139, 30, 0.22);
 }
 
 .hero-orbit-ring-1 {
-  width: 62%;
-  height: 62%;
-  margin: -31% 0 0 -31%;
+  width: 46%;
+  height: 46%;
+  margin: -23% 0 0 -23%;
 }
 
 .hero-orbit-ring-2 {
-  width: 72%;
-  height: 72%;
-  margin: -36% 0 0 -36%;
+  width: 62%;
+  height: 62%;
+  margin: -31% 0 0 -31%;
   border-color: rgba(245, 139, 30, 0.16);
 }
 
+.hero-orbit-ring-3,
+.hero-orbit-shell-3 {
+  width: 80%;
+  height: 80%;
+  margin: -40% 0 0 -40%;
+}
+
 .hero-orbit-ring-3 {
-  width: 86%;
-  height: 86%;
-  margin: -43% 0 0 -43%;
-  border-color: rgba(245, 139, 30, 0.12);
+  border-color: rgba(245, 139, 30, 0.18);
+}
+
+.hero-orbit-ring-4,
+.hero-orbit-shell-4 {
+  width: 96%;
+  height: 96%;
+  margin: -48% 0 0 -48%;
 }
 
 .hero-orbit-ring-4 {
-  width: 98%;
-  height: 98%;
-  margin: -49% 0 0 -49%;
-  border-color: rgba(244, 240, 232, 0.1);
+  border-color: rgba(244, 240, 232, 0.12);
+}
+
+.hero-orbit-carrier {
+  z-index: 3;
+  transform: rotate(var(--orbit-start));
 }
 
 .hero-orbit-planet {
@@ -331,7 +347,7 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hero-orbit-ring {
+  .hero-orbit-carrier {
     animation: hero-orbit-spin var(--orbit-duration) linear infinite;
   }
 
@@ -495,7 +511,7 @@
     transition: none;
   }
 
-  .hero-orbit-ring,
+  .hero-orbit-carrier,
   .hero-orbit-quote {
     animation: none;
   }
