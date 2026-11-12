@@ -33,7 +33,7 @@ export const company = {
   email: {
     address: "hunzatechnologies84@gmail.com",
     href: "mailto:hunzatechnologies84@gmail.com",
-    formsubmitId: "1ca3622dd40563ef2b89cfe9e393b3aa",
+    formEndpoint: "https://form.taxi/s/jtuweah7",
   },
   social: [
     {
