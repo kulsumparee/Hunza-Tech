@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { company } from "../data/company";
 
-const orbitStarts = ["-18deg", "72deg", "168deg", "258deg"];
+const orbitStarts = ["0deg", "72deg", "144deg", "216deg", "288deg"];
 
 export default function Hero() {
   return (
@@ -20,8 +20,8 @@ export default function Hero() {
       <div className="container-site relative grid items-center gap-8 pt-28 pb-14 lg:min-h-[100svh] lg:grid-cols-12 lg:gap-8 lg:pb-20">
         <div className="lg:col-span-6 xl:col-span-6">
           <p className="eyebrow">Nasirabad, Hunza · Digital services & training</p>
-          <h1 className="display mt-6 max-w-[14ch] text-[2.65rem] text-ht-paper sm:text-6xl lg:text-[4.1rem]">
-            Empowering Businesses. Building Digital Futures.
+          <h1 className="display mt-6 text-[3.6rem] leading-[1.15] text-ht-paper">
+            We Build Digital Experiences That Drive Growth.
           </h1>
           <p className="mt-6 max-w-xl text-lg text-ht-paper/75">
             From professional digital solutions to practical technology training, Hunza Technologies
@@ -40,10 +40,14 @@ export default function Hero() {
 
         <div className="relative mx-auto w-full max-w-[19.25rem] sm:max-w-[22.5rem] lg:col-span-6 lg:max-w-[25.5rem]">
           <div className="hero-orbit" role="presentation">
+            <div className="hero-orbit-ring hero-orbit-ring-1" aria-hidden="true" />
+            <div className="hero-orbit-ring hero-orbit-ring-2" aria-hidden="true" />
+            <div className="hero-orbit-ring hero-orbit-ring-3" aria-hidden="true" />
+            <div className="hero-orbit-ring hero-orbit-ring-4" aria-hidden="true" />
             {company.heroQuotes.map((quote, index) => (
               <div
                 key={quote}
-                className={`hero-orbit-ring hero-orbit-ring-${index + 1}`}
+                className="hero-orbit-carrier hero-orbit-shell-4"
                 style={{ "--orbit-start": orbitStarts[index] }}
               >
                 <span className="hero-orbit-planet" aria-hidden="true" />

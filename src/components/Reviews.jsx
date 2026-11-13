@@ -21,14 +21,15 @@ export default function Reviews() {
   const written = googleReviews.items.filter((item) => item.quote);
 
   return (
-    <section className="bg-ht-cream py-20 md:py-24">
+    <section id="reviews" className="bg-ht-cream py-20 md:py-24">
       <div className="container-site grid gap-12 md:grid-cols-12">
         <Reveal className="md:col-span-4">
           <p className="eyebrow">Reviews</p>
           <h2 className="display mt-4 text-4xl">What people wrote on Google.</h2>
           <p className="mt-4 text-ht-stone">
             These ratings are from the public Google listing for {googleReviews.placeName} in
-            Nasirabad. We have not added names or comments that were not published there.
+            Nasirabad, Hunza. Named comments are shown when the reviewer is known, including the
+            Hunza Technologies review from kulsumparee671.
           </p>
           <div className="mt-8 border border-ht-line bg-ht-paper p-6">
             <p className="font-display text-5xl text-ht-ink">{googleReviews.rating.toFixed(1)}</p>
@@ -54,9 +55,23 @@ export default function Reviews() {
             <Reveal key={item.quote} className="border border-ht-line bg-ht-paper p-6 md:p-8">
               <Stars value={item.rating} />
               <blockquote className="mt-4 m-0">
-                <p className="font-display text-2xl text-ht-ink">“{item.quote}”</p>
+                <p
+                  className={`font-display text-ht-ink ${
+                    item.quote.length > 80 ? "text-xl md:text-2xl" : "text-2xl"
+                  }`}
+                >
+                  “{item.quote}”
+                </p>
               </blockquote>
-              <p className="mt-4 text-sm text-ht-mute">Google review · {item.date}</p>
+              <p className="mt-4 text-sm text-ht-mute">
+                {item.author ? (
+                  <>
+                    <span className="font-semibold text-ht-ink">{item.author}</span>
+                    {" · "}
+                  </>
+                ) : null}
+                Google review · {googleReviews.placeName}, Nasirabad · {item.date}
+              </p>
             </Reveal>
           ))}
           <Reveal className="border border-ht-line p-6 text-sm text-ht-stone">

@@ -66,20 +66,23 @@ Verified public facts used on the site:
 
 The previous website used placeholder team names, awards, testimonials and lorem ipsum. None of that content was reused.
 
-Google reviews shown on the homepage are taken from the public IT PARK listing in Nasirabad (5.0 from 4 reviews as published). Reviewer names were not listed, so they are not invented here.
+Google reviews shown on the homepage are taken from the public IT PARK listing in Nasirabad (5.0). The named review from kulsumparee671 is the Hunza Technologies comment posted on that listing. Other reviewer names were not listed, so they are not invented.
 
 ## Contact form
 
-The form validates in the browser, then posts to FormSubmit, which delivers the enquiry to `hunzatechnologies84@gmail.com`.
+The form validates in the browser, then sends the enquiry two ways so it can reach `hunzatechnologies84@gmail.com`:
 
-Each enquiry email is a table of what the visitor typed: full name, email, phone, the skill or service they want (including the training programme when they ask to learn), and their message.
+1. A normal HTML POST to FormSubmit (the method FormSubmit documents; AJAX is blocked by Cloudflare).
+2. A JSON POST to [Form.taxi](https://form.taxi) (`https://form.taxi/s/jtuweah7`).
 
-The first submission from a new website address sends an activation email to that Gmail inbox. Open it, click **Activate Form**, then submit the enquiry again. After that, new enquiries arrive in Gmail with the visitor’s answers.
+Each enquiry email includes what the visitor typed: full name, email, phone, the skill or service they want (including the training programme when they ask to learn), and their message.
 
-To use a different backend, set:
+The first submission from a new website can send an **Activate Form** or Form.taxi confirmation email to that Gmail inbox. Open it, click the link, then submit the enquiry again. After that, new enquiries arrive with the visitor’s answers. Check spam if nothing appears.
+
+To use a different Form.taxi (or similar) JSON endpoint, set:
 
 ```bash
-VITE_FORM_ENDPOINT=https://formspree.io/f/your-id
+VITE_FORM_ENDPOINT=https://form.taxi/s/your-code
 ```
 
 ## Updating content

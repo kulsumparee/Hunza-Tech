@@ -220,6 +220,7 @@
 
 .hero-orbit {
   --orbit-start: 0deg;
+  --orbit-duration: 36s;
   --quote-shift: translate(-50%, 10px);
   position: relative;
   width: 100%;
@@ -232,7 +233,7 @@
 .hero-orbit-sun {
   position: relative;
   z-index: 2;
-  width: 34%;
+  width: 32%;
   border-radius: 50%;
   object-fit: cover;
   box-shadow:
@@ -241,46 +242,58 @@
     0 0 64px rgba(245, 139, 30, 0.18);
 }
 
-.hero-orbit-ring {
+.hero-orbit-ring,
+.hero-orbit-carrier {
   position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 3;
-  border: 1px solid rgba(245, 139, 30, 0.22);
   border-radius: 50%;
   pointer-events: none;
-  transform: rotate(var(--orbit-start));
+}
+
+.hero-orbit-ring {
+  z-index: 1;
+  border: 1px solid rgba(245, 139, 30, 0.22);
 }
 
 .hero-orbit-ring-1 {
-  width: 64%;
-  height: 64%;
-  margin: -32% 0 0 -32%;
-  --orbit-duration: 22s;
+  width: 46%;
+  height: 46%;
+  margin: -23% 0 0 -23%;
 }
 
 .hero-orbit-ring-2 {
-  width: 74%;
-  height: 74%;
-  margin: -37% 0 0 -37%;
-  --orbit-duration: 32s;
+  width: 62%;
+  height: 62%;
+  margin: -31% 0 0 -31%;
   border-color: rgba(245, 139, 30, 0.16);
 }
 
+.hero-orbit-ring-3,
+.hero-orbit-shell-3 {
+  width: 80%;
+  height: 80%;
+  margin: -40% 0 0 -40%;
+}
+
 .hero-orbit-ring-3 {
-  width: 84%;
-  height: 84%;
-  margin: -42% 0 0 -42%;
-  --orbit-duration: 44s;
-  border-color: rgba(245, 139, 30, 0.12);
+  border-color: rgba(245, 139, 30, 0.18);
+}
+
+.hero-orbit-ring-4,
+.hero-orbit-shell-4 {
+  width: 96%;
+  height: 96%;
+  margin: -48% 0 0 -48%;
 }
 
 .hero-orbit-ring-4 {
-  width: 90%;
-  height: 90%;
-  margin: -45% 0 0 -45%;
-  --orbit-duration: 58s;
-  border-color: rgba(244, 240, 232, 0.1);
+  border-color: rgba(244, 240, 232, 0.12);
+}
+
+.hero-orbit-carrier {
+  z-index: 3;
+  transform: rotate(var(--orbit-start));
 }
 
 .hero-orbit-planet {
@@ -302,7 +315,7 @@
   top: 0;
   z-index: 4;
   width: max-content;
-  max-width: 6.2rem;
+  max-width: 5.6rem;
   margin: 0;
   padding: 0.28rem 0.44rem;
   border: 1px solid rgba(245, 139, 30, 0.42);
@@ -320,21 +333,21 @@
 
 @media (min-width: 640px) {
   .hero-orbit-quote {
-    max-width: 8rem;
-    font-size: 0.64rem;
+    max-width: 7.2rem;
+    font-size: 0.62rem;
   }
 }
 
 @media (min-width: 1024px) {
   .hero-orbit-quote {
-    max-width: 8.8rem;
-    padding: 0.34rem 0.55rem;
-    font-size: 0.68rem;
+    max-width: 7.6rem;
+    padding: 0.32rem 0.48rem;
+    font-size: 0.64rem;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hero-orbit-ring {
+  .hero-orbit-carrier {
     animation: hero-orbit-spin var(--orbit-duration) linear infinite;
   }
 
@@ -498,7 +511,7 @@
     transition: none;
   }
 
-  .hero-orbit-ring,
+  .hero-orbit-carrier,
   .hero-orbit-quote {
     animation: none;
   }
