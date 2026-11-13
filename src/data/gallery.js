@@ -44,10 +44,17 @@ export const galleryPhotos = [
 export const googleReviews = {
   placeName: "IT PARK",
   rating: 5,
-  reviewCount: 4,
+  reviewCount: 5,
   mapsUrl:
     "https://www.google.com/maps/place/IT+PARK/@36.2632131,74.5216718,17z/data=!3m1!4b1!4m6!3m5!1s0x38e621004d6c97af:0xe89186517cb08b65!8m2!3d36.2632131!4d74.5216718!16s%2Fg%2F11vz2ytp8h",
   items: [
+    {
+      author: "kulsumparee671",
+      quote:
+        "Really happy with Hunza Technologies! They do great work, understand your needs, and are always helpful. If you're looking for a professional website for your business, I would definitely recommend them.",
+      rating: 5,
+      date: "November 2026",
+    },
     {
       quote: "World class facilities and infrastructure",
       rating: 5,
