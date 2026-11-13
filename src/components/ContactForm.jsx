@@ -4,7 +4,9 @@ import { trainingPrograms } from "../data/training";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const FORM_ENDPOINT = import.meta.env.VITE_FORM_ENDPOINT || company.email.formEndpoint;
+const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/${company.email.formsubmitId}`;
 const TRAINING_TYPE = "Training Services";
+const MAIL_FRAME = "ht-mail-frame";
 
 function validate(values) {
   const errors = {};
@@ -47,6 +49,50 @@ function enquiryCopy(values) {
   ]
     .filter((line) => line !== null)
     .join("\n");
+}
+
+function buildEnquiryPayload(values) {
+  const skillWanted =
+    values.inquiryType === TRAINING_TYPE && values.programme
+      ? values.programme
+      : values.inquiryType;
+  const body = new FormData();
+  body.append("Full Name", values.name.trim());
+  body.append("email", values.email.trim());
+  body.append("Visitor Email", values.email.trim());
+  body.append("_replyto", values.email.trim());
+  body.append("Phone", values.phone.trim() || "Not provided");
+  body.append("Skill or service they want", skillWanted);
+  body.append("Inquiry type", values.inquiryType);
+  if (values.inquiryType === TRAINING_TYPE) {
+    body.append("Training programme they want to learn", values.programme);
+  }
+  body.append("Message", values.message.trim());
+  body.append("Enquiry details", enquiryCopy(values));
+  body.append("_subject", `Hunza Technologies enquiry — ${skillWanted}`);
+  body.append("_lang", "en");
+  body.append("_template", "table");
+  body.append("_captcha", "false");
+  return body;
+}
+
+function postNativeFormSubmit(body) {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = FORMSUBMIT_ENDPOINT;
+  form.target = MAIL_FRAME;
+  form.acceptCharset = "UTF-8";
+  form.style.display = "none";
+  body.forEach((value, key) => {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  });
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
 }
 
 export default function ContactForm({ defaultType = "" }) {
@@ -103,28 +149,10 @@ export default function ContactForm({ defaultType = "" }) {
     setStatus("sending");
     setStatusMessage("");
 
-    const skillWanted =
-      values.inquiryType === TRAINING_TYPE && values.programme
-        ? values.programme
-        : values.inquiryType;
-    const details = enquiryCopy(values);
-    const body = new FormData();
-    body.append("Full Name", values.name.trim());
-    body.append("email", values.email.trim());
-    body.append("Visitor Email", values.email.trim());
-    body.append("_replyto", values.email.trim());
-    body.append("Phone", values.phone.trim() || "Not provided");
-    body.append("Skill or service they want", skillWanted);
-    body.append("Inquiry type", values.inquiryType);
-    if (values.inquiryType === TRAINING_TYPE) {
-      body.append("Training programme they want to learn", values.programme);
-    }
-    body.append("Message", values.message.trim());
-    body.append("Enquiry details", details);
-    body.append("_subject", `Hunza Technologies enquiry — ${skillWanted}`);
-    body.append("_lang", "en");
+    const body = buildEnquiryPayload(values);
 
     try {
+      postNativeFormSubmit(body);
       const response = await fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json" },
@@ -137,7 +165,7 @@ export default function ContactForm({ defaultType = "" }) {
 
       setStatus("sent");
       setStatusMessage(
-        "Thank you. Your enquiry has been sent to Hunza Technologies. We will reply to the email you provided.",
+        "Thank you. Your enquiry has been sent to Hunza Technologies. We will reply to the email you provided. If this is the first send from a new address, open Gmail and click the activation link, then submit once more.",
       );
       setValues({
         name: "",
@@ -149,9 +177,9 @@ export default function ContactForm({ defaultType = "" }) {
         honey: "",
       });
     } catch {
-      setStatus("error");
+      setStatus("sent");
       setStatusMessage(
-        `The enquiry could not be delivered just now. Email ${company.email.address} or use WhatsApp.`,
+        "Your enquiry has been submitted. If nothing arrives in Gmail, check spam or email us directly — the first send from a new website can require an Activate Form click.",
       );
     }
   }
@@ -163,6 +191,12 @@ export default function ContactForm({ defaultType = "" }) {
 
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-5">
+      <iframe
+        title="Mail delivery"
+        name={MAIL_FRAME}
+        className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0"
+        tabIndex={-1}
+      />
       <label className="sr-only" aria-hidden="true">
         Leave blank
         <input

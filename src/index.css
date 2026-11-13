@@ -315,7 +315,7 @@
   top: 0;
   z-index: 4;
   width: max-content;
-  max-width: 6.2rem;
+  max-width: 5.6rem;
   margin: 0;
   padding: 0.28rem 0.44rem;
   border: 1px solid rgba(245, 139, 30, 0.42);
@@ -333,16 +333,16 @@
 
 @media (min-width: 640px) {
   .hero-orbit-quote {
-    max-width: 8rem;
-    font-size: 0.64rem;
+    max-width: 7.2rem;
+    font-size: 0.62rem;
   }
 }
 
 @media (min-width: 1024px) {
   .hero-orbit-quote {
-    max-width: 8.8rem;
-    padding: 0.34rem 0.55rem;
-    font-size: 0.68rem;
+    max-width: 7.6rem;
+    padding: 0.32rem 0.48rem;
+    font-size: 0.64rem;
   }
 }
 
