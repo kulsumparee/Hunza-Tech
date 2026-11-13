@@ -70,16 +70,16 @@ Google reviews shown on the homepage are taken from the public IT PARK listing i
 
 ## Contact form
 
-The form validates in the browser, then posts to FormSubmit, which delivers the enquiry to `hunzatechnologies84@gmail.com`.
+The form validates in the browser, then posts the enquiry to [Form.taxi](https://form.taxi) (`https://form.taxi/s/jtuweah7`). Form.taxi emails it to `hunzatechnologies84@gmail.com`. The visitor stays on the page and sees a success message; this is a JSON POST (`Accept: application/json`), not a cross-origin FormSubmit AJAX call (Cloudflare blocks that).
 
-Each enquiry email is a table of what the visitor typed: full name, email, phone, the skill or service they want (including the training programme when they ask to learn), and their message.
+Each enquiry email includes what the visitor typed: full name, email, phone, the skill or service they want (including the training programme when they ask to learn), and their message.
 
-The first submission from a new website address sends an activation email to that Gmail inbox. Open it, click **Activate Form**, then submit the enquiry again. After that, new enquiries arrive in Gmail with the visitor’s answers.
+Form.taxi sends a one-time confirmation to that Gmail inbox when the endpoint is created. Open it and confirm the account so later submissions are forwarded. After that, new enquiries arrive in Gmail with the visitor’s answers.
 
 To use a different backend, set:
 
 ```bash
-VITE_FORM_ENDPOINT=https://formspree.io/f/your-id
+VITE_FORM_ENDPOINT=https://form.taxi/s/your-code
 ```
 
 ## Updating content

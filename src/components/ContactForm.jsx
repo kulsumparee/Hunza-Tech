@@ -3,7 +3,7 @@ import { company, inquiryTypes } from "../data/company";
 import { trainingPrograms } from "../data/training";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const GMAIL_ENDPOINT = `https://formsubmit.co/ajax/${company.email.formsubmitId}`;
+const FORM_ENDPOINT = import.meta.env.VITE_FORM_ENDPOINT || company.email.formEndpoint;
 const TRAINING_TYPE = "Training Services";
 
 function validate(values) {
@@ -40,9 +40,7 @@ function enquiryCopy(values) {
     `Visitor email: ${values.email.trim()}`,
     `Phone: ${values.phone.trim() || "Not provided"}`,
     `Skill or service they want: ${skill}`,
-    values.inquiryType === TRAINING_TYPE
-      ? `Training programme: ${values.programme}`
-      : null,
+    values.inquiryType === TRAINING_TYPE ? `Training programme: ${values.programme}` : null,
     "",
     "Message:",
     values.message.trim(),
@@ -51,13 +49,7 @@ function enquiryCopy(values) {
     .join("\n");
 }
 
-function isActivationResponse(payload) {
-  const text = `${payload?.message || ""} ${payload?.success || ""}`.toLowerCase();
-  return /activat|confirm your email|one step away|check your inbox/.test(text);
-}
-
 export default function ContactForm({ defaultType = "" }) {
-  const endpoint = import.meta.env.VITE_FORM_ENDPOINT || GMAIL_ENDPOINT;
   const [values, setValues] = useState({
     name: "",
     email: "",
@@ -83,11 +75,12 @@ export default function ContactForm({ defaultType = "" }) {
   }, [values]);
 
   function onChange(event) {
-    const { name, value } = event.target;
+    const field = event.target.getAttribute("data-field") || event.target.name;
+    const { value } = event.target;
     setValues((current) => ({
       ...current,
-      [name]: value,
-      ...(name === "inquiryType" && value !== TRAINING_TYPE ? { programme: "" } : {}),
+      [field]: value,
+      ...(field === "inquiryType" && value !== TRAINING_TYPE ? { programme: "" } : {}),
     }));
   }
 
@@ -117,8 +110,9 @@ export default function ContactForm({ defaultType = "" }) {
     const details = enquiryCopy(values);
     const body = new FormData();
     body.append("Full Name", values.name.trim());
-    body.append("Visitor Email", values.email.trim());
     body.append("email", values.email.trim());
+    body.append("Visitor Email", values.email.trim());
+    body.append("_replyto", values.email.trim());
     body.append("Phone", values.phone.trim() || "Not provided");
     body.append("Skill or service they want", skillWanted);
     body.append("Inquiry type", values.inquiryType);
@@ -128,27 +122,17 @@ export default function ContactForm({ defaultType = "" }) {
     body.append("Message", values.message.trim());
     body.append("Enquiry details", details);
     body.append("_subject", `Hunza Technologies enquiry — ${skillWanted}`);
-    body.append("_replyto", values.email.trim());
-    body.append("_captcha", "false");
-    body.append("_template", "table");
+    body.append("_lang", "en");
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json" },
         body,
       });
       const payload = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(payload.message || "Request failed");
-      }
-
-      if (isActivationResponse(payload)) {
-        setStatus("error");
-        setStatusMessage(
-          `FormSubmit sent an activation email to ${company.email.address}. Open that Gmail, click Activate Form, then submit this enquiry again. After that, each enquiry will show the visitor’s name, email, skill and message.`,
-        );
-        return;
+      if (!response.ok || payload.success === false) {
+        throw new Error(payload.error_msg || payload.message || "Request failed");
       }
 
       setStatus("sent");
@@ -175,18 +159,27 @@ export default function ContactForm({ defaultType = "" }) {
   const fieldClass =
     "mt-2 w-full border border-ht-line bg-ht-cream px-4 py-3 text-ht-ink outline-none transition-colors focus:border-ht-orange";
   const wantsTraining = values.inquiryType === TRAINING_TYPE;
+  const sending = status === "sending";
 
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-5">
       <label className="sr-only" aria-hidden="true">
         Leave blank
-        <input name="honey" value={values.honey} onChange={onChange} tabIndex={-1} autoComplete="off" />
+        <input
+          name="_honeypot"
+          data-field="honey"
+          value={values.honey}
+          onChange={onChange}
+          tabIndex={-1}
+          autoComplete="off"
+        />
       </label>
       <div className="grid gap-5 sm:grid-cols-2">
         <label className="block text-sm font-medium">
           Full name
           <input
-            name="name"
+            name="Full Name"
+            data-field="name"
             value={values.name}
             onChange={onChange}
             autoComplete="name"
@@ -199,6 +192,7 @@ export default function ContactForm({ defaultType = "" }) {
           Email address
           <input
             name="email"
+            data-field="email"
             type="email"
             value={values.email}
             onChange={onChange}
@@ -214,7 +208,8 @@ export default function ContactForm({ defaultType = "" }) {
         <label className="block text-sm font-medium">
           Phone number
           <input
-            name="phone"
+            name="Phone"
+            data-field="phone"
             type="tel"
             value={values.phone}
             onChange={onChange}
@@ -227,7 +222,8 @@ export default function ContactForm({ defaultType = "" }) {
         <label className="block text-sm font-medium">
           Skill or service you want
           <select
-            name="inquiryType"
+            name="Skill or service they want"
+            data-field="inquiryType"
             value={values.inquiryType}
             onChange={onChange}
             className={fieldClass}
@@ -250,7 +246,8 @@ export default function ContactForm({ defaultType = "" }) {
         <label className="block text-sm font-medium">
           Which skill do you want to learn?
           <select
-            name="programme"
+            name="Training programme they want to learn"
+            data-field="programme"
             value={values.programme}
             onChange={onChange}
             className={fieldClass}
@@ -272,7 +269,8 @@ export default function ContactForm({ defaultType = "" }) {
       <label className="block text-sm font-medium">
         Message
         <textarea
-          name="message"
+          name="Message"
+          data-field="message"
           rows={6}
           value={values.message}
           onChange={onChange}
@@ -296,8 +294,8 @@ export default function ContactForm({ defaultType = "" }) {
       ) : null}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <button type="submit" className="btn btn-primary" disabled={status === "sending"}>
-          {status === "sending" ? "Sending…" : "Submit enquiry"}
+        <button type="submit" className="btn btn-primary" disabled={sending}>
+          {sending ? "Sending…" : "Submit enquiry"}
         </button>
         <a href={waHref} className="btn btn-line" target="_blank" rel="noreferrer">
           Or send via WhatsApp
